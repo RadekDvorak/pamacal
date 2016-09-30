@@ -12,11 +12,12 @@ use Tester\Assert;
 class Web2016ParserTest extends TestCase
 {
 
-    public function testParse()
+    /**
+     * @dataProvider provideHtmlSources
+     * @param string $html
+     */
+    public function testParse(string $html)
     {
-        $input = __DIR__ . '/schedule.html';
-        $html = file_get_contents($input);
-
         $parser = new Web2016Parser();
 
         Assert::noError(function () use ($parser, $html) {
@@ -30,6 +31,19 @@ class Web2016ParserTest extends TestCase
 
             Assert::notEqual(0, $i);
         });
+    }
+
+    public function provideHtmlSources() : \Iterator
+    {
+        $files = [
+            __DIR__ . '/schedule-2016-1.html',
+            __DIR__ . '/schedule-2016-2.html',
+            __DIR__ . '/schedule-2016-3.html',
+        ];
+
+        foreach ($files as $file) {
+            yield file_get_contents($file);
+        }
     }
 }
 
